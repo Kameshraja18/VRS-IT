@@ -1,0 +1,45 @@
+# VRS-IT College Management System - Demo Accounts
+
+## Admin Accounts (2)
+1. Email: admin1@gmail.com | Password: admin123 | Name: Dr. Principal Kumar | Role: Admin
+2. Email: admin2@gmail.com | Password: admin123 | Name: Vice Principal Sharma | Role: Admin
+
+## Staff Accounts (5)
+1. Email: staff1@gmail.com | Password: staff123 | Name: Dr. Rajesh Kumar | Faculty ID: FAC001 | Department: CSE | Designation: Professor
+2. Email: staff2@gmail.com | Password: staff123 | Name: Prof. Priya Sharma | Faculty ID: FAC002 | Department: CSE | Designation: Associate Professor
+3. Email: staff3@gmail.com | Password: staff123 | Name: Dr. Suresh Babu | Faculty ID: FAC003 | Department: IT | Designation: Professor
+4. Email: staff4@gmail.com | Password: staff123 | Name: Ms. Kavitha Reddy | Faculty ID: FAC004 | Department: IT | Designation: Assistant Professor
+5. Email: staff5@gmail.com | Password: staff123 | Name: Mr. Arun Kumar | Faculty ID: FAC005 | Department: CSE | Designation: Assistant Professor
+
+## Student Accounts (10)
+1. Email: student1@gmail.com | Password: student123 | Name: Karthik Raj | Roll: VRS2024CSE001 | Course: CSE | Year: 1 | Semester: 1
+2. Email: student2@gmail.com | Password: student123 | Name: Priya Nair | Roll: VRS2024CSE002 | Course: CSE | Year: 1 | Semester: 1
+3. Email: student3@gmail.com | Password: student123 | Name: Arjun Reddy | Roll: VRS2024CSE003 | Course: CSE | Year: 2 | Semester: 3
+4. Email: student4@gmail.com | Password: student123 | Name: Sneha Patel | Roll: VRS2024CSE004 | Course: CSE | Year: 2 | Semester: 3
+5. Email: student5@gmail.com | Password: student123 | Name: Vikram Singh | Roll: VRS2024CSE005 | Course: CSE | Year: 3 | Semester: 5
+6. Email: student6@gmail.com | Password: student123 | Name: Divya Krishnan | Roll: VRS2024IT001 | Course: IT | Year: 1 | Semester: 1
+7. Email: student7@gmail.com | Password: student123 | Name: Rahul Gupta | Roll: VRS2024IT002 | Course: IT | Year: 1 | Semester: 1
+8. Email: student8@gmail.com | Password: student123 | Name: Meera Joshi | Roll: VRS2024IT003 | Course: IT | Year: 2 | Semester: 3
+9. Email: student9@gmail.com | Password: student123 | Name: Aditya Kumar | Roll: VRS2024IT004 | Course: IT | Year: 2 | Semester: 3
+10. Email: student10@gmail.com | Password: student123 | Name: Pooja Sharma | Roll: VRS2024IT005 | Course: IT | Year: 3 | Semester: 5
+
+## Course Structure
+- Computer Science Engineering (CSE) - 8 Semesters
+- Information Technology (IT) - 8 Semesters
+
+## Exam Types
+1. Slip Test 1
+2. Class Assessment 1
+3. Slip Test 2
+4. Class Assessment 2
+5. Anna University Exam (Final)
+
+## Default Login Instructions
+1. Use any of the above email addresses
+2. Enter the corresponding password
+3. System will automatically detect user role and redirect to appropriate dashboard
+
+## Security Note
+- All passwords should be changed after first login
+- Demo accounts are for testing purposes only
+- In production, implement proper password policies
