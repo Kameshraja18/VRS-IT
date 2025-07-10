@@ -71,7 +71,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, activeTab, onTabChan
       
       // Student specific
       { id: 'marksheet', label: 'Download Marksheet', icon: FileText, permission: 'student' },
-      { id: 'profile', label: 'My Profile', icon: Users, permission: 'student,staff' },
+      { id: 'profile', label: 'My Profile', icon: Users, permission: 'student,staff,admin' },
       
       // Settings
       { id: 'settings', label: 'Settings', icon: Settings, permission: 'admin' },

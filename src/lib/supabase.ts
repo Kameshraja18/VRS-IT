@@ -17,9 +17,13 @@ export const testSupabaseConnection = async () => {
   try {
     const { data, error } = await supabase.from('users').select('count').limit(1);
     if (error) throw error;
+    console.log('Supabase connection successful');
     return true;
   } catch (error) {
     console.warn('Supabase connection failed, using demo mode:', error);
     return false;
   }
 };
+
+// Initialize connection test
+testSupabaseConnection();
