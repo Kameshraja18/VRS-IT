@@ -98,13 +98,17 @@ const ResultDeclaration: React.FC = () => {
         });
         
         // Send notification to student
-        await createNotification({
-          user_id: results[i].studentId,
-          title: 'Results Published',
-          message: `Your ${selectedExamType} examination results have been published.`,
-          type: 'success',
-          action_url: '/marks'
-        });
+        try {
+          await createNotification({
+            user_id: results[i].studentId,
+            title: 'Results Published',
+            message: `Your ${selectedExamType} examination results have been published. Overall percentage: ${results[i].percentage}%`,
+            type: 'success',
+            action_url: '/marks'
+          });
+        } catch (notificationError) {
+          console.warn('Failed to send notification:', notificationError);
+        }
         
         await new Promise(resolve => setTimeout(resolve, 500));
       }
@@ -117,8 +121,18 @@ const ResultDeclaration: React.FC = () => {
         ease: "back.out(1.7)"
       });
       
+      // Auto-hide success message after 3 seconds
+      setTimeout(() => {
+        gsap.to('.publish-success', {
+          opacity: 0,
+          scale: 0,
+          duration: 0.3
+        });
+      }, 3000);
+      
     } catch (error) {
       console.error('Error publishing results:', error);
+      alert('Error publishing results. Please try again.');
     } finally {
       setIsPublishing(false);
     }

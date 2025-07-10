@@ -214,10 +214,19 @@ const StaffSignup: React.FC<StaffSignupProps> = ({ onBack, onSuccess }) => {
 
         if (staffError) throw staffError;
 
+        // Show success message
+        alert('Registration successful! Please check your email to verify your account, then login.');
         onSuccess();
       }
     } catch (err: any) {
-      setError(err.message || 'Registration failed. Please try again.');
+      console.error('Registration error:', err);
+      if (err.message?.includes('duplicate key')) {
+        setError('This email or faculty ID is already registered. Please use different credentials.');
+      } else if (err.message?.includes('email')) {
+        setError('Please use a valid email address ending with @gmail.com');
+      } else {
+        setError('Registration failed. Please try again or contact administrator.');
+      }
     } finally {
       setLoading(false);
     }

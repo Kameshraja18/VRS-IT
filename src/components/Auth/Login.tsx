@@ -157,9 +157,14 @@ const Login: React.FC = () => {
 
           {/* Help Text */}
           <div className="mt-6 text-center">
-            <p className="text-xs text-gray-500">
-              For demo accounts, please check the DEMO_ACCOUNTS.txt file in the repository
-            </p>
+            <div className="bg-blue-50 p-3 rounded-lg">
+              <p className="text-xs text-blue-800 font-medium mb-2">Demo Login Credentials:</p>
+              <div className="text-xs text-blue-700 space-y-1">
+                <p><strong>Admin:</strong> admin1@gmail.com / admin123</p>
+                <p><strong>Staff:</strong> staff1@gmail.com / staff123</p>
+                <p><strong>Student:</strong> student1@gmail.com / student123</p>
+              </div>
+            </div>
           </div>
         </div>
       </motion.div>

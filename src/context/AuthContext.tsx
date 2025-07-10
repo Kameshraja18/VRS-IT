@@ -280,7 +280,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return true;
       }
     } catch (error) {
-      console.error('Supabase login error:', error);
+      console.warn('Supabase login failed, using demo mode:', error);
     }
 
     dispatch({ type: 'LOGIN_FAILURE' });

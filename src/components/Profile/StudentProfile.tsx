@@ -32,7 +32,7 @@ const StudentProfile: React.FC = () => {
   const handleSave = () => {
     // Here you would typically save to the database
     setIsEditing(false);
-    // Show success message
+    alert('Profile updated successfully!');
   };
 
   const handleCancel = () => {

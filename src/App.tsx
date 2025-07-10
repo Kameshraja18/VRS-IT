@@ -28,6 +28,9 @@ import MarksheetDownload from './components/Marksheet/MarksheetDownload';
 import ResultDeclaration from './components/ResultDeclaration/ResultDeclaration';
 import AssessmentManagement from './components/Assessments/AssessmentManagement';
 import SettingsPage from './components/Settings/SettingsPage';
+import StaffManagement from './components/Staff/StaffManagement';
+import AdminProfile from './components/Profile/AdminProfile';
+import ComingSoon from './components/Common/ComingSoon';
 
 function App() {
   const { isAuthenticated, user } = useAuth();
@@ -60,11 +63,14 @@ function App() {
         if (user?.role === 'student') return <StudentDashboard />;
         return <div>Dashboard</div>;
       case 'profile':
+        if (user?.role === 'admin') return <AdminProfile />;
         if (user?.role === 'student') return <StudentProfile />;
         if (user?.role === 'staff') return <StaffProfile />;
         return <div>Profile</div>;
       case 'students':
         return <EnhancedStudentsList />;
+      case 'staff':
+        return <StaffManagement />;
       case 'courses':
         return <CoursesList />;
       case 'subjects':
@@ -94,8 +100,21 @@ function App() {
         return <AssessmentManagement />;
       case 'settings':
         return <SettingsPage />;
+      case 'analytics':
+        return <ComingSoon 
+          title="Analytics Dashboard" 
+          description="Comprehensive analytics and reporting tools are coming soon!"
+          features={[
+            'Student Performance Analytics',
+            'Attendance Trends',
+            'Faculty Performance Metrics',
+            'Financial Reports',
+            'Custom Report Builder',
+            'Data Export Options'
+          ]}
+        />;
       default:
-        return <div className="p-6"><h1 className="text-2xl font-bold text-gray-900">Coming Soon</h1></div>;
+        return <ComingSoon title="Feature Coming Soon" />;
     }
   };
 
