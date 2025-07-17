@@ -35,7 +35,11 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
-    initGSAP();
+    try {
+      initGSAP();
+    } catch (error) {
+      console.warn('GSAP initialization failed:', error);
+    }
   }, []);
 
   const handleNotificationClick = () => {

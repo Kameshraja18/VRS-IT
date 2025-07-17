@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
-import { Users, UserCheck, BookOpen, TrendingUp, Calendar, Award, Bell, MessageSquare, Plus, UserPlus, GraduationCap } from 'lucide-react';
+import { Users, UserCheck, BookOpen, TrendingUp, Calendar, Award, Bell, MessageSquare, Plus, UserPlus, GraduationCap, AlertTriangle } from 'lucide-react';
 import { Line, Bar, Doughnut, Radar } from 'react-chartjs-2';
 import AnimatedCard from '../Common/AnimatedCard';
 import { useSupabaseData } from '../../hooks/useSupabaseData';
@@ -11,35 +11,97 @@ interface EnhancedAdminDashboardProps {
 }
 
 const EnhancedAdminDashboard: React.FC<EnhancedAdminDashboardProps> = ({ onQuickAction }) => {
-  const { getUsers, getStudents, getStaff, getNotifications } = useSupabaseData();
+  const { loading, error, getUsers, getStudents, getStaff, getNotifications } = useSupabaseData();
   const statsRef = useRef<HTMLDivElement>(null);
   const [showAddStudentModal, setShowAddStudentModal] = useState(false);
   const [showAddStaffModal, setShowAddStaffModal] = useState(false);
   const [showAddSubjectModal, setShowAddSubjectModal] = useState(false);
+  const [dashboardData, setDashboardData] = useState({
+    totalStudents: 0,
+    totalStaff: 0,
+    totalCourses: 2,
+    averagePerformance: 87
+  });
 
   useEffect(() => {
-    // Animate stats on load
-    if (statsRef.current) {
-      const statCards = statsRef.current.querySelectorAll('.stat-card');
-      gsap.fromTo(statCards,
-        { opacity: 0, y: 50, scale: 0.8 },
-        { 
-          opacity: 1, 
-          y: 0, 
-          scale: 1,
-          duration: 0.8,
-          stagger: 0.1,
-          ease: "back.out(1.7)"
-        }
-      );
-    }
+    loadDashboardData();
   }, []);
 
+  useEffect(() => {
+    // Animate stats on load with error handling
+    if (statsRef.current && !loading) {
+      try {
+        const statCards = statsRef.current.querySelectorAll('.stat-card');
+        if (statCards.length > 0) {
+          gsap.fromTo(statCards,
+            { opacity: 0, y: 50, scale: 0.8 },
+            { 
+              opacity: 1, 
+              y: 0, 
+              scale: 1,
+              duration: 0.8,
+              stagger: 0.1,
+              ease: "back.out(1.7)"
+            }
+          );
+        }
+      } catch (animationError) {
+        console.warn('Animation error:', animationError);
+      }
+    }
+  }, [loading, dashboardData]);
+
+  const loadDashboardData = async () => {
+    try {
+      const [studentsData, staffData] = await Promise.all([
+        getStudents().catch(() => []),
+        getStaff().catch(() => [])
+      ]);
+      
+      setDashboardData({
+        totalStudents: studentsData?.length || 0,
+        totalStaff: staffData?.length || 0,
+        totalCourses: 2,
+        averagePerformance: 87
+      });
+    } catch (err) {
+      console.error('Error loading dashboard data:', err);
+    }
+  };
+
   const stats = [
-    { id: 1, name: 'Total Students', value: 1250, icon: Users, color: 'from-blue-500 to-blue-600', change: '+12%' },
-    { id: 2, name: 'Total Staff', value: 85, icon: UserCheck, color: 'from-green-500 to-green-600', change: '+5%' },
-    { id: 3, name: 'Active Courses', value: 2, icon: BookOpen, color: 'from-purple-500 to-purple-600', change: '+2%' },
-    { id: 4, name: 'Average Performance', value: '87%', icon: TrendingUp, color: 'from-orange-500 to-orange-600', change: '+3%' },
+    { 
+      id: 1, 
+      name: 'Total Students', 
+      value: dashboardData.totalStudents, 
+      icon: Users, 
+      color: 'from-blue-500 to-blue-600', 
+      change: '+12%' 
+    },
+    { 
+      id: 2, 
+      name: 'Total Staff', 
+      value: dashboardData.totalStaff, 
+      icon: UserCheck, 
+      color: 'from-green-500 to-green-600', 
+      change: '+5%' 
+    },
+    { 
+      id: 3, 
+      name: 'Active Courses', 
+      value: dashboardData.totalCourses, 
+      icon: BookOpen, 
+      color: 'from-purple-500 to-purple-600', 
+      change: '+2%' 
+    },
+    { 
+      id: 4, 
+      name: 'Average Performance', 
+      value: `${dashboardData.averagePerformance}%`, 
+      icon: TrendingUp, 
+      color: 'from-orange-500 to-orange-600', 
+      change: '+3%' 
+    },
   ];
 
   const enrollmentData = {
@@ -100,20 +162,24 @@ const EnhancedAdminDashboard: React.FC<EnhancedAdminDashboardProps> = ({ onQuick
   };
 
   const handleQuickAction = (action: string) => {
-    switch (action) {
-      case 'add-student':
-        setShowAddStudentModal(true);
-        break;
-      case 'add-staff':
-        setShowAddStaffModal(true);
-        break;
-      case 'add-subject':
-        setShowAddSubjectModal(true);
-        break;
-      default:
-        if (onQuickAction) {
-          onQuickAction(action);
-        }
+    try {
+      switch (action) {
+        case 'add-student':
+          setShowAddStudentModal(true);
+          break;
+        case 'add-staff':
+          setShowAddStaffModal(true);
+          break;
+        case 'add-subject':
+          setShowAddSubjectModal(true);
+          break;
+        default:
+          if (onQuickAction) {
+            onQuickAction(action);
+          }
+      }
+    } catch (err) {
+      console.error('Error handling quick action:', err);
     }
   };
 
@@ -141,7 +207,71 @@ const EnhancedAdminDashboard: React.FC<EnhancedAdminDashboardProps> = ({ onQuick
         display: true,
       },
     },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: {
+          color: 'rgba(0,0,0,0.1)',
+        },
+      },
+      x: {
+        grid: {
+          color: 'rgba(0,0,0,0.1)',
+        },
+      },
+    },
   };
+
+  const radarOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      r: {
+        beginAtZero: true,
+        max: 100,
+        ticks: {
+          stepSize: 20,
+        },
+        grid: {
+          color: 'rgba(0,0,0,0.1)',
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Dashboard Error</h2>
+          <p className="text-gray-600 mb-4">Unable to load dashboard data</p>
+          <button 
+            onClick={loadDashboardData}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
@@ -194,25 +324,7 @@ const EnhancedAdminDashboard: React.FC<EnhancedAdminDashboardProps> = ({ onQuick
             >
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Enrollment Trends</h3>
               <div className="h-64">
-                <Line
-                  data={enrollmentData}
-                  options={{
-                    ...chartOptions,
-                    scales: {
-                      y: {
-                        beginAtZero: true,
-                        grid: {
-                          color: 'rgba(0,0,0,0.1)',
-                        },
-                      },
-                      x: {
-                        grid: {
-                          color: 'rgba(0,0,0,0.1)',
-                        },
-                      },
-                    },
-                  }}
-                />
+                <Line data={enrollmentData} options={chartOptions} />
               </div>
             </motion.div>
           </AnimatedCard>
@@ -225,26 +337,7 @@ const EnhancedAdminDashboard: React.FC<EnhancedAdminDashboardProps> = ({ onQuick
             >
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Department Performance</h3>
               <div className="h-64">
-                <Bar
-                  data={performanceData}
-                  options={{
-                    ...chartOptions,
-                    scales: {
-                      y: {
-                        beginAtZero: true,
-                        max: 100,
-                        grid: {
-                          color: 'rgba(0,0,0,0.1)',
-                        },
-                      },
-                      x: {
-                        grid: {
-                          display: false,
-                        },
-                      },
-                    },
-                  }}
-                />
+                <Bar data={performanceData} options={chartOptions} />
               </div>
             </motion.div>
           </AnimatedCard>
@@ -260,7 +353,8 @@ const EnhancedAdminDashboard: React.FC<EnhancedAdminDashboardProps> = ({ onQuick
                 <Doughnut
                   data={attendanceData}
                   options={{
-                    ...chartOptions,
+                    responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                       legend: {
                         position: 'bottom',
@@ -280,24 +374,7 @@ const EnhancedAdminDashboard: React.FC<EnhancedAdminDashboardProps> = ({ onQuick
             >
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Student Skills Assessment</h3>
               <div className="h-64">
-                <Radar
-                  data={skillsData}
-                  options={{
-                    ...chartOptions,
-                    scales: {
-                      r: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                          stepSize: 20,
-                        },
-                        grid: {
-                          color: 'rgba(0,0,0,0.1)',
-                        },
-                      },
-                    },
-                  }}
-                />
+                <Radar data={skillsData} options={radarOptions} />
               </div>
             </motion.div>
           </AnimatedCard>

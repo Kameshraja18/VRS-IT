@@ -8,7 +8,7 @@ export const useSupabaseData = () => {
 
   const handleError = (err: any) => {
     console.error('Supabase error:', err);
-    setError(err.message || 'An error occurred');
+    setError(err?.message || 'An error occurred');
     setLoading(false);
   };
 
@@ -65,10 +65,10 @@ export const useSupabaseData = () => {
       if (error) throw error;
       
       setLoading(false);
-      return data;
+      return data || [];
     } catch (err) {
       handleError(err);
-      return [];
+      return null;
     }
   };
 
@@ -126,10 +126,10 @@ export const useSupabaseData = () => {
       
       if (error) throw error;
       setLoading(false);
-      return data;
+      return data || [];
     } catch (err) {
       handleError(err);
-      return [];
+      return null;
     }
   };
 
@@ -186,10 +186,10 @@ export const useSupabaseData = () => {
       
       if (error) throw error;
       setLoading(false);
-      return data;
+      return data || [];
     } catch (err) {
       handleError(err);
-      return [];
+      return null;
     }
   };
 
@@ -224,10 +224,10 @@ export const useSupabaseData = () => {
       
       if (error) throw error;
       setLoading(false);
-      return data;
+      return data || [];
     } catch (err) {
       handleError(err);
-      return [];
+      return null;
     }
   };
 
@@ -266,10 +266,10 @@ export const useSupabaseData = () => {
       
       if (error) throw error;
       setLoading(false);
-      return data;
+      return data || [];
     } catch (err) {
       handleError(err);
-      return [];
+      return null;
     }
   };
 
@@ -314,10 +314,10 @@ export const useSupabaseData = () => {
       if (error) throw error;
       
       setLoading(false);
-      return data;
+      return data || [];
     } catch (err) {
       handleError(err);
-      return [];
+      return null;
     }
   };
 
@@ -362,10 +362,10 @@ export const useSupabaseData = () => {
       if (error) throw error;
       
       setLoading(false);
-      return data;
+      return data || [];
     } catch (err) {
       handleError(err);
-      return [];
+      return null;
     }
   };
 
@@ -426,10 +426,10 @@ export const useSupabaseData = () => {
       if (error) throw error;
       
       setLoading(false);
-      return data;
+      return data || [];
     } catch (err) {
       handleError(err);
-      return [];
+      return null;
     }
   };
 
@@ -473,10 +473,10 @@ export const useSupabaseData = () => {
       if (error) throw error;
       
       setLoading(false);
-      return data;
+      return data || [];
     } catch (err) {
       handleError(err);
-      return [];
+      return null;
     }
   };
 
@@ -512,10 +512,10 @@ export const useSupabaseData = () => {
       
       if (error) throw error;
       setLoading(false);
-      return data;
+      return data || [];
     } catch (err) {
       handleError(err);
-      return [];
+      return null;
     }
   };
 
@@ -570,10 +570,10 @@ export const useSupabaseData = () => {
       
       if (error) throw error;
       setLoading(false);
-      return data;
+      return data || [];
     } catch (err) {
       handleError(err);
-      return [];
+      return null;
     }
   };
 
@@ -614,10 +614,10 @@ export const useSupabaseData = () => {
       if (error) throw error;
       
       setLoading(false);
-      return data;
+      return data || [];
     } catch (err) {
       handleError(err);
-      return [];
+      return null;
     }
   };
 

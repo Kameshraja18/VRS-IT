@@ -22,7 +22,7 @@ const AnimatedCard: React.FC<AnimatedCardProps> = ({
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (cardRef.current) {
+    if (cardRef.current && gsap) {
       const element = cardRef.current;
       
       let fromProps: any = {};
@@ -51,35 +51,50 @@ const AnimatedCard: React.FC<AnimatedCardProps> = ({
           break;
       }
 
-      gsap.fromTo(element, fromProps, {
-        ...toProps,
-        duration: 0.8,
-        delay,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: element,
-          start: "top 80%",
-          toggleActions: "play none none reverse"
-        }
-      });
+      try {
+        gsap.fromTo(element, fromProps, {
+          ...toProps,
+          duration: 0.8,
+          delay,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: element,
+            start: "top 80%",
+            toggleActions: "play none none reverse"
+          }
+        });
+      } catch (error) {
+        console.warn('GSAP animation failed:', error);
+        // Fallback to CSS animation
+        element.style.opacity = '1';
+        element.style.transform = 'translateY(0)';
+      }
 
       // Simple hover animations
       const handleMouseEnter = () => {
-        gsap.to(element, {
-          scale: 1.02,
-          y: -5,
-          duration: 0.3,
-          ease: "power2.out"
-        });
+        try {
+          gsap.to(element, {
+            scale: 1.02,
+            y: -5,
+            duration: 0.3,
+            ease: "power2.out"
+          });
+        } catch (error) {
+          console.warn('Hover animation failed:', error);
+        }
       };
 
       const handleMouseLeave = () => {
-        gsap.to(element, {
-          scale: 1,
-          y: 0,
-          duration: 0.3,
-          ease: "power2.out"
-        });
+        try {
+          gsap.to(element, {
+            scale: 1,
+            y: 0,
+            duration: 0.3,
+            ease: "power2.out"
+          });
+        } catch (error) {
+          console.warn('Hover animation failed:', error);
+        }
       };
 
       element.addEventListener('mouseenter', handleMouseEnter);

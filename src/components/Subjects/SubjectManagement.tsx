@@ -52,15 +52,19 @@ const SubjectManagement: React.FC = () => {
   }, []);
 
   const loadData = async () => {
-    const [subjectsData, coursesData, staffData] = await Promise.all([
-      getSubjects(),
-      getCourses(),
-      getStaff()
-    ]);
-    
-    setSubjects(subjectsData || []);
-    setCourses(coursesData || []);
-    setStaff(staffData || []);
+    try {
+      const [subjectsData, coursesData, staffData] = await Promise.all([
+        getSubjects().catch(() => []),
+        getCourses().catch(() => []),
+        getStaff().catch(() => [])
+      ]);
+      
+      setSubjects(subjectsData || []);
+      setCourses(coursesData || []);
+      setStaff(staffData || []);
+    } catch (err) {
+      console.error('Error loading data:', err);
+    }
   };
 
   const canManageSubjects = user?.role === 'admin' || user?.role === 'staff';

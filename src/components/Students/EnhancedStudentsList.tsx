@@ -39,8 +39,14 @@ const EnhancedStudentsList: React.FC = () => {
   }, []);
 
   const loadStudents = async () => {
-    const studentsData = await getStudents();
-    setStudents(studentsData || []);
+    try {
+      const studentsData = await getStudents();
+      if (studentsData) {
+        setStudents(studentsData);
+      }
+    } catch (err) {
+      console.error('Error loading students:', err);
+    }
   };
 
   const filteredStudents = students.filter(student => {

@@ -64,23 +64,33 @@ const MarksManagement: React.FC = () => {
   }, [selectedSubject, selectedSession, selectedExamType]);
 
   const loadInitialData = async () => {
-    const [studentsData, subjectsData, sessionsData] = await Promise.all([
-      getStudents(),
-      getSubjects(),
-      getSessions()
-    ]);
-    
-    setStudents(studentsData || []);
-    setSubjects(subjectsData || []);
-    setSessions(sessionsData || []);
+    try {
+      const [studentsData, subjectsData, sessionsData] = await Promise.all([
+        getStudents().catch(() => []),
+        getSubjects().catch(() => []),
+        getSessions().catch(() => [])
+      ]);
+      
+      setStudents(studentsData || []);
+      setSubjects(subjectsData || []);
+      setSessions(sessionsData || []);
+    } catch (err) {
+      console.error('Error loading initial data:', err);
+    }
   };
 
   const loadMarks = async () => {
-    const marksData = await getMarks({
-      subjectId: selectedSubject,
-      sessionId: selectedSession
-    });
-    setMarks(marksData?.filter((mark: Mark) => mark.exam_type === selectedExamType) || []);
+    try {
+      const marksData = await getMarks({
+        subjectId: selectedSubject,
+        sessionId: selectedSession
+      });
+      if (marksData) {
+        setMarks(marksData.filter((mark: Mark) => mark.exam_type === selectedExamType));
+      }
+    } catch (err) {
+      console.error('Error loading marks:', err);
+    }
   };
 
   const canManageMarks = user?.role === 'admin';

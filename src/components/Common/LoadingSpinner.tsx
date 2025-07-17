@@ -13,13 +13,17 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   const spinnerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (spinnerRef.current) {
-      gsap.to(spinnerRef.current, {
-        rotation: 360,
-        duration: 1,
-        repeat: -1,
-        ease: "none"
-      });
+    if (spinnerRef.current && gsap) {
+      try {
+        gsap.to(spinnerRef.current, {
+          rotation: 360,
+          duration: 1,
+          repeat: -1,
+          ease: "none"
+        });
+      } catch (error) {
+        console.warn('GSAP animation failed:', error);
+      }
     }
   }, []);
 
